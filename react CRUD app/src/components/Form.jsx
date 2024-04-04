@@ -1,98 +1,93 @@
+
 import React, { useState } from "react";
 
-export default function Form({ imlist, id, editEmployee, edit, imployee }) {
+export default function Form(props) {
+  const { setEmployees, id, editEmployee, editId, employees } = props;
+
+  // show warning if user data is empty
+
   const [warning, setwarning] = React.useState(false);
-  const [formData, setFormData] = useState({
+
+  // show update to currnt
+  const [update, setUpdate] = React.useState(false);
+
+  const initialData = {
     name: "",
     userName: "",
-  });
+  };
+  const [formData, setFormData] = useState(initialData);
+
+  // when input value changes input value to formData
 
   function handleChange(event) {
     const { name, value } = event.target;
     setFormData((prevFormData) => {
-      return {
-        ...prevFormData,
-        [name]: value,
-      };
-    });
-  }
-  const [update, setupdate] = React.useState(false);
-
-  function updateList(params) {
-    setupdate(false);
-    let newArr = imployee.filter((i) => i.id !== edit);
-    console.log(newArr);
-    imlist((prev) => {
-      return [
-        ...newArr,
-        {
-          id: id(),
-          userName: formData.userName,
-          name: formData.name,
-        },
-      ];
+      return { ...prevFormData, [name]: value };
     });
   }
 
+  // updateList function update employees old emplyees to new employee
+
+  function updateList(event) {
+    event.preventDefault();
+    setUpdate(false);
+
+    const newArr = employees.filter((i) => i.id !== editId);
+    setEmployees((prev) => [
+      { id: id(), userName: formData.userName, name: formData.name },
+      ...newArr,
+    ]);
+    setFormData(initialData);
+  }
+
+ // handleSubmit function add new employee
+
+ function handleSubmit(event) {
+  event.preventDefault();
+
+  if (formData.name.length >= 1 && formData.userName.length >= 1) {
+    setFormData(initialData);
+
+    setwarning(false);
+
+    setEmployees((prev) => [
+      { id: id(), userName: formData.userName, name: formData.name },
+      ...prev,
+    ]);
+  } else {
+    setwarning(true);
+  }
+}
+
+  //  when edit id changes set form value to employee that we want to change and set update to true
   React.useEffect(() => {
-    if (edit) {
-      let curruntEmployee = imployee.find((item) => {
-        return item.id === edit;
-      });
-      // console.log("username",formData.userName);
-      // console.log("foram data",formData);
-      // console.log("naem",formData.name);
-      // console.log("naem",curruntEmployee);
+    if (editId) {
+      const curruntEmployee = employees.find((item) => item.id === editId);
 
       setFormData({
         name: curruntEmployee.name,
-
         userName: curruntEmployee.userName,
       });
-      setupdate(true);
+      setUpdate(true);
     }
-  }, [edit]);
+  }, [editId]);
 
-  function handleSubmit(event) {
-    event.preventDefault();
+ 
 
-    if (formData.name.length > 1 && formData.userName.length > 1) {
-      setFormData({
-        name: "",
-        userName: "",
-      });
-
-      setwarning(false);
-      imlist((prev) => {
-        return [
-          ...prev,
-          {
-            id: id(),
-            userName: formData.userName,
-            name: formData.name,
-          },
-        ];
-      });
-    } else {
-      setwarning(true);
-    }
-  }
   return (
     <>
-      
-    
       <div className="form">
-        <h2>Add user</h2>
+        <h2 className="inputTitle">Add user</h2>
         <form onSubmit={update ? updateList : handleSubmit}>
           <div className="mb-3">
-            <label htmlFor="name" className="form-label fw-bolder" type="text">
+            <label htmlFor="name" className="form-label fw-bolder">
               Name
             </label>
             <input
               type="text"
-              className="form-control "
+              className="form-control"
               id="name"
-              aria-describedby="name"
+              aria-describedby="emailHelp"
               onChange={handleChange}
               name="name"
               value={formData.name}
@@ -112,8 +107,9 @@ export default function Form({ imlist, id, editEmployee, edit, imployee }) {
             />
           </div>
 
-        {warning && <div className="warning">Please enter valide value</div>}
-          <button type="submit" className="btn btn-primary fw-bolder">
+          {warning && <div className="warning">Please enter valid value</div>}
+
+          <button type="submit" className="btn btn-primary fw-bolder max">
             Add new user
           </button>
         </form>
