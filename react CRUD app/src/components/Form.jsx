@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 
 export default function Form(props) {
+
   const { setEmployees, id, editEmployee, editId, employees } = props;
 
   // show warning if user data is empty
@@ -40,24 +41,24 @@ export default function Form(props) {
     setFormData(initialData);
   }
 
- // handleSubmit function add new employee
+  // handleSubmit function add new employee
 
- function handleSubmit(event) {
-  event.preventDefault();
+  function handleSubmit(event) {
+    event.preventDefault();
 
-  if (formData.name.length >= 1 && formData.userName.length >= 1) {
-    setFormData(initialData);
+    if (formData.name.length >= 1 && formData.userName.length >= 1) {
+      setFormData(initialData);
 
-    setwarning(false);
+      setwarning(false);
 
-    setEmployees((prev) => [
-      { id: id(), userName: formData.userName, name: formData.name },
-      ...prev,
-    ]);
-  } else {
-    setwarning(true);
+      setEmployees((prev) => [
+        { id: id(), userName: formData.userName, name: formData.name },
+        ...prev,
+      ]);
+    } else {
+      setwarning(true);
+    }
   }
-}
 
   //  when edit id changes set form value to employee that we want to change and set update to true
   React.useEffect(() => {
@@ -72,7 +73,7 @@ export default function Form(props) {
     }
   }, [editId]);
 
- 
+
 
   return (
     <>
