@@ -33,11 +33,13 @@ export default function Form(props) {
     event.preventDefault();
     setUpdate(false);
 
-    const newArr = employees.filter((i) => i.id !== editId);
-    setEmployees((prev) => [
+    setEmployees((prevVal) => {
+      const newArr = prevVal.filter((i) => i.id !== editId);
+      
+      return [
       { id: id(), userName: formData.userName, name: formData.name },
       ...newArr,
-    ]);
+    ]});
     setFormData(initialData);
   }
 
@@ -51,9 +53,9 @@ export default function Form(props) {
 
       setwarning(false);
 
-      setEmployees((prev) => [
+      setEmployees((prevVal) => [
         { id: id(), userName: formData.userName, name: formData.name },
-        ...prev,
+        ...prevVal,
       ]);
     } else {
       setwarning(true);
