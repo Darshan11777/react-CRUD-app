@@ -26,7 +26,7 @@ export default function Home() {
 
   const [employees, setEmployees] = useState(() => {
     const storedEmployees = JSON.parse(localStorage.getItem("employees"));
-    return storedEmployees.length >= 1 ? storedEmployees : initialEmployees;
+    return storedEmployees && storedEmployees.length >= 1 ? storedEmployees : initialEmployees;
   });
 
   // State for tracking the currently selected employee ID for editing
